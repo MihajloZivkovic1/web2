@@ -1,22 +1,20 @@
+let currentSortCriteria = 'default';
+let currentFilterCriteria = 'default';
+
 fetch('data/products.json')
   .then(response => response.json())
-  .then(json => {
-    productsDOM.products = JSON.parse(json).map(product => {
-      return new Product(product)
-    })
-    productsDOM.showProducts()
-    cart.showLocalStorage()
-  })
+  .then(products => {
+    productsDOM.products = products.map(product => new Product(product));
+    productsDOM.showProducts();
+    cart.showLocalStorage();
+  });
 
 fetch('data/categories.json')
   .then(response => response.json())
-  .then(json => {
-    productsDOM.categories = JSON.parse(json).map(name => {
-      return new Category(name)
-    })
-    productsDOM.showCategoryButtons()
-  })
-
+  .then(categories => {
+    productsDOM.categories = categories.map(name => new Category(name));
+    productsDOM.showCategoryButtons();
+  });
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -27,6 +25,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 class Product {
   #properties = ['id', 'title', 'desc', 'img', 'price', 'category']
   domEl
+  sortCriteria = 'default'
 
   constructor(data) {
     this.#properties.forEach(property => {
@@ -36,6 +35,9 @@ class Product {
 
   formatedPrice() {
     return formatter.format(this.price)
+  }
+  setSortCriteria(criteria) {
+    this.sortCriteria = criteria
   }
 }
 
@@ -77,20 +79,32 @@ class ProductsDOM {
 
   showActiveCategory(event) {
     const productEls = this.productContainerEl.querySelectorAll('.js-productItem')
-
     const clickedCategoryName = event.currentTarget.dataset.name
-    if (clickedCategoryName === 'all') {
-      productEls.forEach(productEl => productEl.style.display = 'grid')
-      return
+
+    let filteredProducts = this.products.filter(product => {
+      return clickedCategoryName === 'all' || product.category === clickedCategoryName;
+    });
+
+    switch (currentSortCriteria) {
+      case 'price-low-to-high':
+        filteredProducts.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high-to-low':
+        filteredProducts.sort((a, b) => b.price - a.price);
+        break;
+      // Add more cases for other sorting criteria if needed
+
+      default:
+        break;
     }
 
     productEls.forEach(productEl => {
-      const product = this.products.find(product => product.id == productEl.dataset.id)
-      if (product.category != clickedCategoryName) {
-        productEl.style.display = 'none'
-      } else productEl.style.display = 'grid'
-    })
+      const product = this.products.find(product => product.id == productEl.dataset.id);
+      const isVisible = filteredProducts.some(filteredProduct => filteredProduct.id === product.id);
+      productEl.style.display = isVisible ? 'grid' : 'none';
+    });
   }
+
 
   // Style changing when is-active class is active/clicked the category want to view
   changeStyleOfActiveCategory(productCategoryEls, event) {
@@ -103,7 +117,37 @@ class ProductsDOM {
 
   // show all products
   showProducts() {
-    let productsHTML = this.products.map(product => {
+    let sortedProducts = this.products.slice();
+
+    const priceLowToHighButton = document.querySelector('.js-sortByPriceLowToHigh');
+    const priceHighToLowButton = document.querySelector('.js-sortByPriceHighToLow');
+
+    priceLowToHighButton.addEventListener('click', () => {
+      currentSortCriteria = 'price-low-to-high';
+      localStorage.setItem('currentSortCriteria', currentSortCriteria);
+      this.showProducts()
+
+    })
+
+    priceHighToLowButton.addEventListener('click', () => {
+      currentSortCriteria = 'price-high-to-low';
+      localStorage.setItem('currentSortCriteria', currentSortCriteria);
+      this.showProducts()
+    })
+
+    switch (currentSortCriteria) {
+      case 'price-low-to-high':
+        sortedProducts.sort((a, b) => a.price - b.price)
+        break;
+      case 'price-high-to-low':
+        sortedProducts.sort((a, b) => b.price - a.price)
+        break
+
+      default:
+        break;
+    }
+
+    let productsHTML = sortedProducts.map(product => {
       return `<div class="product__item js-productItem" data-id="${product.id}">
             <img class="product__item__image" src="${product.img}" alt="${product.title}">
             <div class="product__item__detail">
@@ -130,7 +174,11 @@ class ProductsDOM {
       product.domEl = new ProductDOM(product, productEl, productButtonEl)
       product.domEl.setClickEvent()
     })
+
+
   }
+
+
 }
 
 const productsDOM = new ProductsDOM()

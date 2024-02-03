@@ -13,18 +13,19 @@ cartCloseButton.addEventListener('click', () => headerCart.classList.remove('is-
 let navItemsList = [{
   title: 'products',
   link: 'products',
-  dropdownItems: [{
-    title: 'sunglasses',
-    link: 'sunglasses',
-  },
-  {
-    title: 'trousers',
-    link: 'trousers',
-  },
-  {
-    title: 'necklace',
-    link: 'necklace',
-  }
+  dropdownItems: [
+    {
+      title: 'sunglasses',
+      link: 'sunglasses',
+    },
+    {
+      title: 'trousers',
+      link: 'trousers',
+    },
+    {
+      title: 'necklace',
+      link: 'necklace',
+    }
   ]
 },
 {
@@ -34,19 +35,19 @@ let navItemsList = [{
 {
   title: 'contact',
   link: 'contact',
-  dropdownItems: [{
-    title: 'reach us',
-    link: 'reach-us'
-  },
-
-  {
-    title: 'about us',
-    link: 'about-us'
-  },
-  {
-    title: 'find us',
-    link: 'find-us'
-  }
+  dropdownItems: [
+    {
+      title: 'reach us',
+      link: 'reach-us'
+    },
+    {
+      title: 'about us',
+      link: 'about-us'
+    },
+    {
+      title: 'find us',
+      link: 'find-us'
+    }
   ]
 }
 ]
@@ -59,15 +60,16 @@ class NavItem {
   }
 
   toHTML() {
-    let navItemHTML = `<div class="header__nav-wrapper js-headerNavWrapper"><div class="header__nav__item-wrapper">
-            <a href="/#${this.link}" class="header__nav__item link js-headerNavItem" title="${this.title}">${this.title}</a>`
+    let navItemHTML = `<div class="header__nav-wrapper js-headerNavWrapper">
+                      <div class="header__nav__item-wrapper">
+                       <a href="/#${this.link}" class="header__nav__item link js-headerNavItem" title="${this.title}">${this.title}</a>`
 
     if (this.dropdownItems) {
       navItemHTML += `<button class="header__nav__button js-headerNavButton" type="button">
-                <svg class="icon icon-down">
-                    <use xlink:href="#icon-down"></use>
-                </svg>
-            </button>`
+                          <svg class="icon icon-down">
+                              <use xlink:href="#icon-down"></use>
+                          </svg>
+                      </button>`
 
     }
     navItemHTML += `</div>`
