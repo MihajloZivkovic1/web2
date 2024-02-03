@@ -96,3 +96,4 @@ const slider = new Slider(slides)
 slider.init()
 
 
+

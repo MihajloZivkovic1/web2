@@ -10,13 +10,14 @@ const imagemin = require('gulp-imagemin');
 const liquid = require('@tuanpham-dev/gulp-liquidjs')
 const reload = browserSync.reload
 
-  gulp.task('browser-sync', () => {
-    browserSync.init({
-      notify: false,
-      server: {
-        baseDir: './'
-      } 
-    })
+gulp.task('browser-sync', () => {
+  browserSync.init({
+    notify: false,
+    server: {
+      baseDir: './'
+    }
+  })
+
 
   gulp.watch('./*.html').on('change', reload)
   gulp.watch('./scss/*.scss').on('change', reload);
@@ -51,7 +52,7 @@ gulp.task('default', gulp.series('html', 'css', 'browser-sync'))
 
 gulp.task('dist-css', () => {
   return gulp.src('./css/*.css')
-    .pipe(cleanCSS({level: {1: {specialComments: false}}}))
+    .pipe(cleanCSS({ level: { 1: { specialComments: false } } }))
     .pipe(gulp.dest('dist/css'));
 })
 
@@ -76,8 +77,8 @@ gulp.task('dist-img', () => {
 })
 
 gulp.task('dist-data', () => {
-    return gulp.src('./data/*')
-      .pipe(gulp.dest('dist/data'));
-  })
+  return gulp.src('./data/*')
+    .pipe(gulp.dest('dist/data'));
+})
 
 gulp.task('dist', gulp.series('css', 'html', 'dist-css', 'dist-html', 'dist-js', 'dist-img', 'dist-data'));

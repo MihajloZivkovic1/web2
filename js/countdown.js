@@ -1,26 +1,26 @@
 const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
 ]
 
 const weekdays = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ]
 
 const endDate = document.querySelector('.js-endDate')
@@ -47,36 +47,36 @@ endDate.innerHTML = `Offer ends on <time>${weekday}, ${date} ${month} ${year} ${
 const futureTime = futureDate.getTime()
 
 function getRemainingTime() {
-    const now = new Date().getTime()
-    const diff = futureTime - now
-    const oneDay = 24 * 60 * 60 * 1000
-    const oneHour = 60 * 60 * 1000
-    const oneMinute = 60 * 1000
+  const now = new Date().getTime()
+  const diff = futureTime - now
+  const oneDay = 24 * 60 * 60 * 1000
+  const oneHour = 60 * 60 * 1000
+  const oneMinute = 60 * 1000
 
-    let days = diff / oneDay
-    days = Math.floor(days)
+  let days = diff / oneDay
+  days = Math.floor(days)
 
-    let hours = Math.floor((diff % oneDay) / oneHour)
-    let minutes = Math.floor((diff % oneHour) / oneMinute)
-    let seconds = Math.floor((diff % oneMinute) / 1000)
+  let hours = Math.floor((diff % oneDay) / oneHour)
+  let minutes = Math.floor((diff % oneHour) / oneMinute)
+  let seconds = Math.floor((diff % oneMinute) / 1000)
 
-    const values = [days, hours, minutes, seconds]
+  const values = [days, hours, minutes, seconds]
 
-    function format(value) {
-        if (value < 10) {
-            return value = `0${value}`
-        }
-        return value
+  function format(value) {
+    if (value < 10) {
+      return value = `0${value}`
     }
+    return value
+  }
 
-    countdownValues.forEach((value, index) => {
-        value.innerHTML = format(values[index])
-    })
+  countdownValues.forEach((value, index) => {
+    value.innerHTML = format(values[index])
+  })
 
-    if (diff < 0) {
-        clearInterval(countdown)
-        countdown.innerHTML = `<p class="countdown__alert" >Sorry, this offer has expired</p>`
-    }
+  if (diff < 0) {
+    clearInterval(countdown)
+    countdown.innerHTML = `<p class="countdown__alert" >Sorry, this offer has expired</p>`
+  }
 }
 
 let setCountdown = setInterval(getRemainingTime, 1000)
