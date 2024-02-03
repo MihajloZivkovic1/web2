@@ -85,19 +85,6 @@ class ProductsDOM {
       return clickedCategoryName === 'all' || product.category === clickedCategoryName;
     });
 
-    switch (currentSortCriteria) {
-      case 'price-low-to-high':
-        filteredProducts.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high-to-low':
-        filteredProducts.sort((a, b) => b.price - a.price);
-        break;
-      // Add more cases for other sorting criteria if needed
-
-      default:
-        break;
-    }
-
     productEls.forEach(productEl => {
       const product = this.products.find(product => product.id == productEl.dataset.id);
       const isVisible = filteredProducts.some(filteredProduct => filteredProduct.id === product.id);
